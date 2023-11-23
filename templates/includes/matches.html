@@ -303,12 +303,23 @@ function updateElement(match) {
                 } else if (v.toString()!="substitution") {
                      blinkUpdate(document.getElementById("gstype_" + match.id)," - ");
                 }
-
+                if (v.toString()=="foul"){
+                    blinkUpdate(document.getElementById("free_" + match.id),match.detail);
+                }
+                if (v.toString()=="freethrow"){
+                    blinkUpdate(document.getElementById("free_" + match.id),match.desc);
+                }
             }
             if (k == "desc") {
                 if (v.toString()=="start") {
                     checkPeriod(match.id-1);
                     console.log(v.toString());
+                }
+                if (v.toString()=="1 of 1" || v.toString()=="2 of 2" || v.toString()=="1 of 3"){
+                    blinkUpdate(document.getElementById("free_" + match.id),match.desc);
+                }
+                if (previousValue=="1 of 1" || previousValue=="2 of 2" || previousValue=="1 of 3"){
+                    blinkUpdate(document.getElementById("free_" + match.id)," - ");
                 }
             }
         }
