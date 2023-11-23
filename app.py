@@ -2,6 +2,7 @@ from flask import Flask
 from flask import render_template, jsonify
 import urllib.request, json
 import urllib.error
+
 app = Flask(__name__)
 
 
@@ -20,13 +21,13 @@ def schedule():
                 'a_score': game['awayTeam']['score'],
                 'home': game['homeTeam']['teamTricode'],
                 'h_score':game['homeTeam']['score'],
-                'time': game['gameEt'],
+                'time': game['period'],
                 'a_to': game['awayTeam']['timeoutsRemaining'],
                 'h_to': game['homeTeam']['timeoutsRemaining'],
                 'game_id': game['gameId'],
                 'a_bonus': game['awayTeam']['inBonus'],
                 'h_bonus': game['homeTeam']['inBonus'],
-                'clock': game['gameClock']}
+                'clock': game['gameStatusText']}
             games_dict.append(temp_dict)
         return(games_dict)
 

@@ -6,7 +6,7 @@
       <th scope="col">Score</th>
       <th scope="col">Home</th>
       <th scope="col">Score</th>
-      <th scope="col">Time</th>
+      <th scope="col">Quarter</th>
       <th scope="col">T/O (A)</th>
          <th scope="col">T/O (H)</th>
          <th scope="col">Bonus (A)</th>
@@ -15,6 +15,8 @@
          <th scope="col">Last Play</th>
          <th scope="col">Play Type</th>
          <th scope="col">Play Info</th>
+        <th scope="col">Game State</th>
+        <th scope="col">Free Throws</th>
 
     </tr>
   </thead>
@@ -35,35 +37,37 @@
       <td id="state_{{ match.id }}">{{ match.state }}</td>
       <td id="desc_{{ match.id }}">{{ match.desc }}</td>
       <td id="detail_{{ match.id }}">{{ match.detail }}</td>
+      <td id="gstype_{{ match.id }}">{{ 0 }}</td>
+      <td id="free_{{ match.id }}">{{ 0 }}</td>
       </tr>
     {% endfor %}
   </tbody>
 </table>
 <script>
 
-     function checkPeriod(){
-
-        var to_team = document.querySelectorAll('[id^="away_"]');
+     function checkPeriod(i){
+        console.log(i, "period");
+        var to_team = document.querySelectorAll('[id^="home_"]');
         var startend = document.querySelectorAll('[id^="desc_"]');
-        for(var i in startend){
+        var period = document.querySelectorAll('[id^="time_"]')
             msg = startend[i].textContent;
             if(msg == "start" || msg == "end"){
-                speakPeriod(to_team[i].textContent, startend[i].textContent);
+                speakPeriod(to_team[i].textContent, startend[i].textContent, period[i].textContent);
             }
-        }
+
     };
 
-    function checkTimeout(){
+    function checkTimeout(i2){
         var timeouts = document.querySelectorAll('[id^="state_"]');
         var to_team = document.querySelectorAll('[id^="detail_"]');
-        for(var i in timeouts){
-            msg = timeouts[i].textContent;
+            msg = timeouts[i2].textContent;
+            console.log(msg);
             if(msg == "timeout"){
-                speakTimeout(to_team[i].textContent);
+                speakTimeout(to_team[i2].textContent);
             }
-        }
+
     };
-    function speakPeriod(t,se){
+    function speakPeriod(t,se,pe){
         switch (t) {
   case 'ATL':
     team = "hawks";
@@ -155,7 +159,8 @@
 
 
 }
-        let text = team + " period " + se;
+        console.log(team);
+        let text = team + pe + " period " + se;
         let utterance = new SpeechSynthesisUtterance(text);
         speechSynthesis.speak(utterance);
         speechSynthesis.speak(utterance);
@@ -237,7 +242,7 @@
   case 'OKC Timeout':
     team = "thunder";
     break;
-  case 'PHO Timeout':
+  case 'PHX Timeout':
     team = "suns";
     break;
   case 'POR Timeout':
@@ -255,7 +260,7 @@
 
 
 }
-        let text = team.concat(" timeout");
+        let text = team + " timeout";
         let utterance = new SpeechSynthesisUtterance(text);
         speechSynthesis.speak(utterance);
         speechSynthesis.speak(utterance);
@@ -277,8 +282,8 @@
   );
 
 function updateElement(match) {
-    Object.entries(match).forEach(([k,v]) => {
 
+    Object.entries(match).forEach(([k,v]) => {
         element = document.getElementById(k + "_" + match.id);
         // Get Previous value first
         previousValue = element.innerHTML;
@@ -286,23 +291,23 @@ function updateElement(match) {
         // If Previous value is not equal to the new value, change it!
 
 
-
         if (previousValue !== v.toString()) {
 
             blinkUpdate(element, v.toString());
             if (k == "state") {
-
-
                 if (v.toString()=="timeout") {
-                    checkTimeout();
-                    console.log(v.toString());
+                    checkTimeout(match.id-1,"timeout");
+                    blinkUpdate(document.getElementById("gstype_" + match.id),"timeout");
+                } else if (v.toString()=="timeout") {
+                     blinkUpdate(document.getElementById("gstype_" + match.id),"between period");
+                } else if (v.toString()!="substitution") {
+                     blinkUpdate(document.getElementById("gstype_" + match.id)," - ");
                 }
+
             }
             if (k == "desc") {
-
-
                 if (v.toString()=="start") {
-                    checkPeriod();
+                    checkPeriod(match.id-1);
                     console.log(v.toString());
                 }
             }
