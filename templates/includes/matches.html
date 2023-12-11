@@ -1,339 +1,909 @@
-<table class="table table-dark table-striped">
-  <thead>
-    <tr>
-         <th scope="col">ID</th>
-      <th scope="col">Away</th>
-      <th scope="col">Score</th>
-      <th scope="col">Home</th>
-      <th scope="col">Score</th>
-      <th scope="col">Quarter</th>
-      <th scope="col">T/O (A)</th>
-         <th scope="col">T/O (H)</th>
-         <th scope="col">Bonus (A)</th>
-         <th scope="col">Bonus (H)</th>
-         <th scope="col">Game Clock</th>
-         <th scope="col">Last Play</th>
-         <th scope="col">Play Type</th>
-         <th scope="col">Play Info</th>
-        <th scope="col">Game State</th>
-        <th scope="col">Free Throws</th>
+<table class="table table-dark table-striped" id="table1">
+ <thead>
+   <tr>
+        <th scope="col">ID</th>
+     <th scope="col">Away</th>
+     <th scope="col">Score</th>
+     <th scope="col">Score</th>
+     <th scope="col">Home</th>
+       <th scope="col">Game Clock</th>
+     <th scope="col" class="noness">Quarter</th>
+     <th scope="col" class="noness">T/O (A)</th>
+        <th scope="col" class="noness">T/O (H)</th>
+        <th scope="col">Bonus (A)</th>
+        <th scope="col">Bonus (H)</th>
+        <th scope="col" class="noness">Last Play</th>
+        <th scope="col" class="noness">Play Type</th>
+        <th scope="col" class="noness" style="width:300px">Play Info</th>
+       <th scope="col">Game State</th>
+       <th scope="col">Free Throws</th>
 
-    </tr>
-  </thead>
-  <tbody id="table_body">
-    {% for match in matches %}
-      <tr>
-        <td id="id_{{ match.id }}">{{ match.id }}</td>
-        <td id="away_{{ match.id }}">{{ match.away }}</td>
-        <td id="a_score_{{ match.id }}">{{ match.a_score }}</td>
-        <td id="home_{{ match.id }}">{{ match.home }}</td>
-        <td id="h_score_{{ match.id }}">{{ match.h_score }}</td>
-        <td id="time_{{ match.id }}">{{ match.time }}</td>
-      <td id="a_to_{{ match.id }}">{{ match.a_to }}</td>
-      <td id="h_to_{{ match.id }}">{{ match.h_to }}</td>
-      <td id="a_bonus_{{ match.id }}">{{ match.a_bonus }}</td>
-      <td id="h_bonus_{{ match.id }}">{{ match.h_bonus }}</td>
-      <td id="clock_{{ match.id }}">{{ match.clock }}</td>
-      <td id="state_{{ match.id }}">{{ match.state }}</td>
-      <td id="desc_{{ match.id }}">{{ match.desc }}</td>
-      <td id="detail_{{ match.id }}">{{ match.detail }}</td>
-      <td id="gstype_{{ match.id }}">{{ 0 }}</td>
-      <td id="free_{{ match.id }}">{{ 0 }}</td>
-      </tr>
-    {% endfor %}
-  </tbody>
+
+   </tr>
+ </thead>
+ <tbody id="table_body">
+   {% for match in matches %}
+     <tr>
+       <td id="id_{{ match.id }}" class="{{ match.state }}">{{ match.id }}</td>
+       <td id="away_{{ match.id }}" class="{{ match.state }}">{{ match.away }}</td>
+       <td id="a_score_{{ match.id }}" class="{{ match.state }}">{{ match.a_score }}</td>
+       <td id="h_score_{{ match.id }}" class="{{ match.state }}">{{ match.h_score }}</td>
+       <td id="home_{{ match.id }}" class="{{ match.state }}">{{ match.home }}</td>
+         <td id="clock_{{ match.id }}" class="{{ match.state }}">{{ match.clock }}</td>
+       <td id="time_{{ match.id }}" class="noness {{ match.state }}">{{ match.time }}</td>
+     <td id="a_to_{{ match.id }}" class="noness {{ match.state }}">{{ match.a_to }}</td>
+     <td id="h_to_{{ match.id }}" class="noness {{ match.state }}">{{ match.h_to }}</td>
+     <td id="a_bonus_{{ match.id }}" class="{{ match.state }}">{{ match.a_bonus }}</td>
+     <td id="h_bonus_{{ match.id }}" class="{{ match.state }}">{{ match.h_bonus }}</td>
+     <td id="state_{{ match.id }}" class="noness {{ match.state }}">{{ match.state }}</td>
+     <td id="desc_{{ match.id }}" class="noness {{ match.state }}">{{ match.desc }}</td>
+     <td id="detail_{{ match.id }}" class="noness {{ match.state }}">{{ match.detail }}</td>
+     <td id="gstype_{{ match.id }}" class="{{ match.state }}">{{ 0 }}</td>
+     <td id="free_{{ match.id }}" class="{{ match.state }}">{{ 0 }}</td>
+     </tr>
+   {% endfor %}
+ </tbody>
 </table>
+<button onclick="hideExcess()">Show Essential Cols Only</button>
+<button onclick="showExcess()">Show All Cols</button>
+<button onclick="hideGames()">Show Inplay Games</button>
+<button onclick="showGames()">Show All Games</button>
+
+
 <script>
 
-     function checkPeriod(i){
-        console.log(i, "period");
-        var to_team = document.querySelectorAll('[id^="home_"]');
-        var startend = document.querySelectorAll('[id^="desc_"]');
-        var period = document.querySelectorAll('[id^="time_"]')
-            msg = startend[i].textContent;
-            if(msg == "start" || msg == "end"){
-                speakPeriod(to_team[i].textContent, startend[i].textContent, period[i].textContent);
-            }
 
-    };
+   function hideExcess()
+{
+   var elems = document.getElementsByClassName("noness");
+   for(var i = 0; i<elems.length; i++) {
+       elems[i].style.display = "none";
+   }
+}
+ function hideGames()
+{
+   var elems = document.getElementsByClassName("inplay");
+   for(var i = 0; i<elems.length; i++) {
+       elems[i].style.display = "none";
+   }
+   var elems2 = document.getElementsByClassName("game");
+   for(var i = 0; i<elems2.length; i++) {
+       elems2[i].style.display = "none";
+   }
+}
+function showGames()
+{
+   var elems = document.getElementsByClassName("inplay");
+   for(var i = 0; i<elems.length; i++) {
+       elems[i].style.display = "";
+   }
+   var elems2 = document.getElementsByClassName("game");
+   for(var i = 0; i<elems2.length; i++) {
+       elems2[i].style.display = "";
+   }
+}
+  function showExcess()
+{
+   var elems = document.getElementsByClassName("noness");
+   for(var i = 0; i<elems.length; i++) {
+       elems[i].style.display = "";
+   }
+}
 
-    function checkTimeout(i2){
-        var timeouts = document.querySelectorAll('[id^="state_"]');
-        var to_team = document.querySelectorAll('[id^="detail_"]');
-            msg = timeouts[i2].textContent;
-            console.log(msg);
-            if(msg == "timeout"){
-                speakTimeout(to_team[i2].textContent);
-            }
 
-    };
-    function speakPeriod(t,se,pe){
-        switch (t) {
-  case 'ATL':
-    team = "hawks";
-    break;
-  case 'BOS':
-    team = "celtics";
-    break;
-  case 'BKN':
-     team = "nets";
-    break;
-  case 'CHI':
-    team = "bulls";
-    break;
-  case 'CHA':
-    team = "hornets";
-    break;
-  case 'CLE':
-    team = "cavs";
-    break;
-  case 'DET':
-    team = "pistons";
-    break;
-  case 'IND':
-    team = "pacers";
-    break;
-  case 'MIA':
-     team = "heat";
-    break;
-  case 'MIL':
-    team = "bucks";
-    break;
-  case 'NYK':
-    team = "nicks";
-    break;
-  case 'ORL':
-    team = "magic";
-    break;
-  case 'PHI':
-    team = "sixers";
-    break;
-  case 'TOR':
-    team = "raptors";
-    break;
-  case 'WAS':
-     team = "wizards";
-    break;
-  case 'DAL':
-    team = "mavs";
-    break;
-  case 'DEN':
-    team = "nuggets";
-    break;
-  case 'GSW':
-    team = "warriors";
-    break;
-  case 'HOU':
-    team = "rockets";
-    break;
-  case 'LAC':
-    team = "clippers";
-    break;
-  case 'LAL':
-     team = "lakers";
-    break;
-  case 'MEM':
-    team = "grizzlies";
-    break;
-  case 'NOP':
-    team = "pelicans";
-    break;
-  case 'OKC':
-    team = "thunder";
-    break;
-  case 'PHO':
-    team = "suns";
-    break;
-  case 'POR':
-    team = "blazers";
-    break;
-  case 'SAC':
-     team = "kings";
-    break;
-  case 'SAS':
-    team = "spurs";
-    break;
-  case 'UTA':
-    team = "jazz";
-    break;
+   function checkPeriod(i,q, pq){
+
+
+       var to_team = document.querySelectorAll('[id^="home_"]');
+       var startend = document.querySelectorAll('[id^="desc_"]');
+       var qualmsg = q;
+       var pq2 = pq;
+       msg = startend[i].textContent;
+       console.log("in check period now with message ", msg ," and quarter ", pq ,pq2);
+           if(msg == "start"){
+               if(pq2==3 | pq2=="3"){
+                   speakReturn(to_team[i].textContent);
+                   console.log("speaking return based on q==3 with msg start");
+
+
+               }else{
+                   speakPeriod(to_team[i].textContent, startend[i].textContent, pq2);
+                   console.log("speaking any other Q based on msg start");
+               }
+
+
+           }
+           if(qualmsg=="startperiod"){
+               if(pq2==3 | pq2=="3"){
+                   speakReturn(to_team[i].textContent);
+                   console.log("startperiod after half");
+               }else{
+                   if(pq2!=1 && pq2!="1"){
+                       speakPeriod(to_team[i].textContent, "start", pq2);
+                       console.log("startperiod any other Q");
+                   }
+
+
+               }
+
+
+           }
+           if(qualmsg == "end"){
+               if(pq2==1 || pq2==3 || pq2=="1" || pq2=="3"){
+                   speakPeriod(to_team[i].textContent, "end", pq2);
+                   console.log("endperiod 1 or 3");
+               }
+               if(pq2==2 || pq2=="2" ){
+                   speakHalf(to_team[i].textContent);
+                   console.log("half time from check period");
+               }
+
+
+
+
+           }
+
+
+
+
+   };
+   function checkTimeout(i2){
+       var timeouts = document.querySelectorAll('[id^="state_"]');
+       var to_team = document.querySelectorAll('[id^="home_"]');
+       var dess = document.querySelectorAll('[id^="desc_"]');
+
+
+           msg = timeouts[i2].textContent;
+           des = dess[i2].textContent;
+           if(msg == "timeout"){
+               speakTimeout(to_team[i2].textContent);
+           }
+           if(des == "full" || des == "challenge"){
+               speakTimeout(to_team[i2].textContent);
+           }
+
+
+   };
+   function speakPeriod(t,se,pe){
+       console.log(Date.now());
+       switch (t) {
+ case 'ATL':
+   team = "hawks";
+   break;
+ case 'BOS':
+   team = "celtics";
+   break;
+ case 'BKN':
+    team = "nets";
+   break;
+ case 'CHI':
+   team = "bulls";
+   break;
+ case 'CHA':
+   team = "hornets";
+   break;
+ case 'CLE':
+   team = "cavs";
+   break;
+ case 'DET':
+   team = "pistons";
+   break;
+ case 'IND':
+   team = "pacers";
+   break;
+ case 'MIA':
+    team = "heat";
+   break;
+ case 'MIL':
+   team = "bucks";
+   break;
+ case 'NYK':
+   team = "nicks";
+   break;
+ case 'ORL':
+   team = "magic";
+   break;
+ case 'PHI':
+   team = "sixers";
+   break;
+ case 'TOR':
+   team = "raptors";
+   break;
+ case 'WAS':
+    team = "wizards";
+   break;
+ case 'DAL':
+   team = "mavs";
+   break;
+ case 'DEN':
+   team = "nuggets";
+   break;
+ case 'GSW':
+   team = "warriors";
+   break;
+ case 'HOU':
+   team = "rockets";
+   break;
+ case 'LAC':
+   team = "clippers";
+   break;
+ case 'LAL':
+    team = "lakers";
+   break;
+ case 'MEM':
+   team = "grizzlies";
+   break;
+ case 'NOP':
+   team = "pelicans";
+   break;
+ case 'OKC':
+   team = "thunder";
+   break;
+ case 'PHX':
+   team = "suns";
+   break;
+ case 'POR':
+   team = "blazers";
+   break;
+ case 'SAC':
+    team = "kings";
+   break;
+ case 'SAS':
+   team = "spurs";
+   break;
+ case 'UTA':
+   team = "jazz";
+   break;
+     case 'MIN':
+   team = "tee wolves";
+   break;
+
+
 
 
 }
-        console.log(team);
-        let text = team + pe + " period " + se;
-        let utterance = new SpeechSynthesisUtterance(text);
-        speechSynthesis.speak(utterance);
-        speechSynthesis.speak(utterance);
-        speechSynthesis.speak(utterance);
-        console.log(text)
+       let text = team + se + "of quarter " + pe ;
+       let utterance = new SpeechSynthesisUtterance(text);
+       speechSynthesis.speak(utterance);
+       speechSynthesis.speak(utterance);
+       speechSynthesis.speak(utterance);
+       console.log(text)
 
-    };
-    function speakTimeout(t){
-        switch (t) {
-  case 'ATL Timeout':
-    team = "hawks";
-    break;
-  case 'BOS Timeout':
-    team = "celtics";
-    break;
-  case 'BKN Timeout':
-     team = "nets";
-    break;
-  case 'CHI Timeout':
-    team = "bulls";
-    break;
-  case 'CHA Timeout':
-    team = "hornets";
-    break;
-  case 'CLE Timeout':
-    team = "cavs";
-    break;
-  case 'DET Timeout':
-    team = "pistons";
-    break;
-  case 'IND Timeout':
-    team = "pacers";
-    break;
-  case 'MIA Timeout':
-     team = "heat";
-    break;
-  case 'MIL Timeout':
-    team = "bucks";
-    break;
-  case 'NYK Timeout':
-    team = "nicks";
-    break;
-  case 'ORL Timeout':
-    team = "magic";
-    break;
-  case 'PHI Timeout':
-    team = "sixers";
-    break;
-  case 'TOR Timeout':
-    team = "raptors";
-    break;
-  case 'WAS Timeout':
-     team = "wizards";
-    break;
-  case 'DAL Timeout':
-    team = "mavs";
-    break;
-  case 'DEN Timeout':
-    team = "nuggets";
-    break;
-  case 'GSW Timeout':
-    team = "warriors";
-    break;
-  case 'HOU Timeout':
-    team = "rockets";
-    break;
-  case 'LAC Timeout':
-    team = "clippers";
-    break;
-  case 'LAL Timeout':
-     team = "lakers";
-    break;
-  case 'MEM Timeout':
-    team = "grizzlies";
-    break;
-  case 'NOP Timeout':
-    team = "pelicans";
-    break;
-  case 'OKC Timeout':
-    team = "thunder";
-    break;
-  case 'PHX Timeout':
-    team = "suns";
-    break;
-  case 'POR Timeout':
-    team = "blazers";
-    break;
-  case 'SAC Timeout':
-     team = "kings";
-    break;
-  case 'SAS Timeout':
-    team = "spurs";
-    break;
-  case 'UTA Timeout':
-    team = "jazz";
-    break;
+
+   };
+   function speakReturn(t_ret){
+       console.log(Date.now());
+       switch (t_ret) {
+ case 'ATL':
+   team = "hawks";
+   break;
+ case 'BOS':
+   team = "celtics";
+   break;
+ case 'BKN':
+    team = "nets";
+   break;
+ case 'CHI':
+   team = "bulls";
+   break;
+ case 'CHA':
+   team = "hornets";
+   break;
+ case 'CLE':
+   team = "cavs";
+   break;
+ case 'DET':
+   team = "pistons";
+   break;
+ case 'IND':
+   team = "pacers";
+   break;
+ case 'MIA':
+    team = "heat";
+   break;
+ case 'MIL':
+   team = "bucks";
+   break;
+ case 'NYK':
+   team = "nicks";
+   break;
+ case 'ORL':
+   team = "magic";
+   break;
+ case 'PHI':
+   team = "sixers";
+   break;
+ case 'TOR':
+   team = "raptors";
+   break;
+ case 'WAS':
+    team = "wizards";
+   break;
+ case 'DAL':
+   team = "mavs";
+   break;
+ case 'DEN':
+   team = "nuggets";
+   break;
+ case 'GSW':
+   team = "warriors";
+   break;
+ case 'HOU':
+   team = "rockets";
+   break;
+ case 'LAC':
+   team = "clippers";
+   break;
+ case 'LAL':
+    team = "lakers";
+   break;
+ case 'MEM':
+   team = "grizzlies";
+   break;
+ case 'NOP':
+   team = "pelicans";
+   break;
+ case 'OKC':
+   team = "thunder";
+   break;
+ case 'PHX':
+   team = "suns";
+   break;
+ case 'POR':
+   team = "blazers";
+   break;
+ case 'SAC':
+    team = "kings";
+   break;
+ case 'SAS':
+   team = "spurs";
+   break;
+ case 'UTA':
+   team = "jazz";
+   break;
+     case 'MIN':
+   team = "tee wolves";
+   break;
+
+
 
 
 }
-        let text = team + " timeout";
-        let utterance = new SpeechSynthesisUtterance(text);
-        speechSynthesis.speak(utterance);
-        speechSynthesis.speak(utterance);
-        speechSynthesis.speak(utterance);
+       let text = team + " back from half time" ;
+       let utterance = new SpeechSynthesisUtterance(text);
+       speechSynthesis.speak(utterance);
+       speechSynthesis.speak(utterance);
+       speechSynthesis.speak(utterance);
+       console.log(text)
 
-        console.log(text)
 
-    };
-  setInterval(function() {
-      fetch('/data_json').then(
-        response => response.json()
-      ).then(
-        data =>
-          data.forEach(match =>
-            updateElement(match)
-          )
-      )
-    }, 1000
-  );
+   };
+
+
+   function speakTimeout(t){
+       console.log(Date.now());
+       switch (t) {
+ case 'ATL':
+   team = "hawks";
+   break;
+ case 'BOS':
+   team = "celtics";
+   break;
+ case 'BKN':
+    team = "nets";
+   break;
+ case 'CHI':
+   team = "bulls";
+   break;
+ case 'CHA':
+   team = "hornets";
+   break;
+ case 'CLE':
+   team = "cavs";
+   break;
+ case 'DET':
+   team = "pistons";
+   break;
+ case 'IND':
+   team = "pacers";
+   break;
+ case 'MIA':
+    team = "heat";
+   break;
+ case 'MIL':
+   team = "bucks";
+   break;
+ case 'NYK':
+   team = "nicks";
+   break;
+ case 'ORL':
+   team = "magic";
+   break;
+ case 'PHI':
+   team = "sixers";
+   break;
+ case 'TOR':
+   team = "raptors";
+   break;
+ case 'WAS':
+    team = "wizards";
+   break;
+ case 'DAL':
+   team = "mavs";
+   break;
+ case 'DEN':
+   team = "nuggets";
+   break;
+ case 'GSW':
+   team = "warriors";
+   break;
+ case 'HOU':
+   team = "rockets";
+   break;
+ case 'LAC':
+   team = "clippers";
+   break;
+ case 'LAL':
+    team = "lakers";
+   break;
+ case 'MEM':
+   team = "grizzlies";
+   break;
+ case 'NOP':
+   team = "pelicans";
+   break;
+ case 'OKC':
+   team = "thunder";
+   break;
+ case 'PHX':
+   team = "suns";
+   break;
+ case 'POR':
+   team = "blazers";
+   break;
+ case 'SAC':
+    team = "kings";
+   break;
+ case 'SAS':
+   team = "spurs";
+   break;
+ case 'UTA':
+   team = "jazz";
+   break;
+     case 'MIN':
+   team = "tee wolves";
+   break;
+
+
+
+
+}
+       let text = team + " timeout";
+       let utterance = new SpeechSynthesisUtterance(text);
+       speechSynthesis.speak(utterance);
+       speechSynthesis.speak(utterance);
+       speechSynthesis.speak(utterance);
+       console.log(text)
+
+
+   };
+
+
+   function speakHalf(t){
+       console.log(Date.now());
+       switch (t) {
+ case 'ATL':
+   team = "hawks";
+   break;
+ case 'BOS':
+   team = "celtics";
+   break;
+ case 'BKN':
+    team = "nets";
+   break;
+ case 'CHI':
+   team = "bulls";
+   break;
+ case 'CHA':
+   team = "hornets";
+   break;
+ case 'CLE':
+   team = "cavs";
+   break;
+ case 'DET':
+   team = "pistons";
+   break;
+ case 'IND':
+   team = "pacers";
+   break;
+ case 'MIA':
+    team = "heat";
+   break;
+ case 'MIL':
+   team = "bucks";
+   break;
+ case 'NYK':
+   team = "nicks";
+   break;
+ case 'ORL':
+   team = "magic";
+   break;
+ case 'PHI':
+   team = "sixers";
+   break;
+ case 'TOR':
+   team = "raptors";
+   break;
+ case 'WAS':
+    team = "wizards";
+   break;
+ case 'DAL':
+   team = "mavs";
+   break;
+ case 'DEN':
+   team = "nuggets";
+   break;
+ case 'GSW':
+   team = "warriors";
+   break;
+ case 'HOU':
+   team = "rockets";
+   break;
+ case 'LAC':
+   team = "clippers";
+   break;
+ case 'LAL':
+    team = "lakers";
+   break;
+ case 'MEM':
+   team = "grizzlies";
+   break;
+ case 'NOP':
+   team = "pelicans";
+   break;
+ case 'OKC':
+   team = "thunder";
+   break;
+ case 'PHO':
+   team = "suns";
+   break;
+ case 'POR':
+   team = "blazers";
+   break;
+ case 'SAC':
+    team = "kings";
+   break;
+ case 'SAS':
+   team = "spurs";
+   break;
+ case 'UTA':
+   team = "jazz";
+   break;
+     case 'MIN':
+   team = "tee wolves";
+   break;
+
+
+
+
+}
+       let text = team + " half time";
+       let utterance = new SpeechSynthesisUtterance(text);
+       speechSynthesis.speak(utterance);
+       speechSynthesis.speak(utterance);
+       speechSynthesis.speak(utterance);
+       console.log(text)
+
+
+   };
+   function speakStart(t_g){
+       console.log(Date.now());
+       switch (t_g) {
+ case 'ATL':
+   team = "hawks";
+   break;
+ case 'BOS':
+   team = "celtics";
+   break;
+ case 'BKN':
+    team = "nets";
+   break;
+ case 'CHI':
+   team = "bulls";
+   break;
+ case 'CHA':
+   team = "hornets";
+   break;
+ case 'CLE':
+   team = "cavs";
+   break;
+ case 'DET':
+   team = "pistons";
+   break;
+ case 'IND':
+   team = "pacers";
+   break;
+ case 'MIA':
+    team = "heat";
+   break;
+ case 'MIL':
+   team = "bucks";
+   break;
+ case 'NYK':
+   team = "nicks";
+   break;
+ case 'ORL':
+   team = "magic";
+   break;
+ case 'PHI':
+   team = "sixers";
+   break;
+ case 'TOR':
+   team = "raptors";
+   break;
+ case 'WAS':
+    team = "wizards";
+   break;
+ case 'DAL':
+   team = "mavs";
+   break;
+ case 'DEN':
+   team = "nuggets";
+   break;
+ case 'GSW':
+   team = "warriors";
+   break;
+ case 'HOU':
+   team = "rockets";
+   break;
+ case 'LAC':
+   team = "clippers";
+   break;
+ case 'LAL':
+    team = "lakers";
+   break;
+ case 'MEM':
+   team = "grizzlies";
+   break;
+ case 'NOP':
+   team = "pelicans";
+   break;
+ case 'OKC':
+   team = "thunder";
+   break;
+ case 'PHO':
+   team = "suns";
+   break;
+ case 'POR':
+   team = "blazers";
+   break;
+ case 'SAC':
+    team = "kings";
+   break;
+ case 'SAS':
+   team = "spurs";
+   break;
+ case 'UTA':
+   team = "jazz";
+   break;
+     case 'MIN':
+   team = "tee wolves";
+   break;
+
+
+
+
+}
+       let text = "tip off" + team;
+       let utterance = new SpeechSynthesisUtterance(text);
+       speechSynthesis.speak(utterance);
+       speechSynthesis.speak(utterance);
+       speechSynthesis.speak(utterance);
+       console.log(text)
+
+
+   };
+ setInterval(function() {
+     fetch('/data_json').then(
+       response => response.json()
+     ).then(
+       data =>
+         data.forEach(match =>
+           updateElement(match)
+         )
+     )
+   }, 550
+ );
+
 
 function updateElement(match) {
-
-    Object.entries(match).forEach(([k,v]) => {
-        element = document.getElementById(k + "_" + match.id);
-        // Get Previous value first
-        previousValue = element.innerHTML;
-
-        // If Previous value is not equal to the new value, change it!
+   Object.entries(match).forEach(([k,v]) => {
 
 
-        if (previousValue !== v.toString()) {
+       if(k!="qual") {
+           element = document.getElementById(k + "_" + match.id);
+           // Get Previous value first
+           previousValue = element.innerHTML;
 
-            blinkUpdate(element, v.toString());
-            if (k == "state") {
-                if (v.toString()=="timeout") {
-                    checkTimeout(match.id-1,"timeout");
-                    blinkUpdate(document.getElementById("gstype_" + match.id),"timeout");
-                } else if (v.toString()=="timeout") {
-                     blinkUpdate(document.getElementById("gstype_" + match.id),"between period");
-                } else if (v.toString()!="substitution") {
-                     blinkUpdate(document.getElementById("gstype_" + match.id)," - ");
-                }
-                if (v.toString()=="foul"){
-                    blinkUpdate(document.getElementById("free_" + match.id),match.detail);
-                }
-                if (v.toString()=="freethrow"){
-                    blinkUpdate(document.getElementById("free_" + match.id),match.desc);
-                }
-            }
-            if (k == "desc") {
-                if (v.toString()=="start") {
-                    checkPeriod(match.id-1);
-                    console.log(v.toString());
-                }
-                if (v.toString()=="1 of 1" || v.toString()=="2 of 2" || v.toString()=="1 of 3"){
-                    blinkUpdate(document.getElementById("free_" + match.id),match.desc);
-                }
-                if (previousValue=="1 of 1" || previousValue=="2 of 2" || previousValue=="1 of 3"){
-                    blinkUpdate(document.getElementById("free_" + match.id)," - ");
-                }
-            }
-        }
-    })
+
+           //check game start
+           if(previousValue == "not inplay" && k=="desc"){
+               if(v.toString()!=previousValue){
+                   speakStart(match.home);
+                   console.log("starting the game now for ", match.home);
+                   console.log(k, " ", v.toString(), previousValue, "for game ", match.id, " with qual ", match.qual.toString());
+               }
+           }
+           // If Previous value is not equal to the new value, change it!
+           if (k == "desc") {
+               if (v.toString() == "personal" || v.toString() == "technical") {
+                   var temp = match.qual.toString();
+                   temp = temp.replace("inpenalty"," ");
+                   temp = temp.replace(","," ");
+                   temp = temp.replace("freethrow"," ");
+                   blinkUpdateYellow(document.getElementById("free_" + match.id), temp);
+
+
+               }
+               if (v.toString() == "1 of 1" || v.toString() == "2 of 2" || v.toString() == "3 of 3") {
+                   blinkUpdateYellow(document.getElementById("free_" + match.id), "0");
+               }
+               if (previousValue == "1 of 1" || previousValue == "2 of 2" || previousValue == "3 of 3") {
+                   blinkUpdateYellow(document.getElementById("free_" + match.id), "0");
+               }
+               if (v.toString() == "1 of 2" || v.toString() == "2 of 3") {
+                   blinkUpdateYellow(document.getElementById("free_" + match.id), "1");
+               }
+               if (v.toString() == "1 of 3" || v.toString() == "1 of 3") {
+                   blinkUpdateYellow(document.getElementById("free_" + match.id), "2");
+               }
+
+
+           }
+
+
+           if (k == "a_score" || k == "h_score") {
+               if (previousValue !== v.toString()) {
+                   scoreUpdate(element, v.toString());
+               }
+           } else {
+               if (previousValue !== v.toString()) {
+                   if(k=="time"){
+                       //speakPeriod(match.time);
+                   }
+
+
+
+
+                   if(k == "clock") {
+                       if(v.toString()=="Half"){
+                           console.log("calling halftime from update ", match.time);
+                           speakHalf(match.home);
+                       }
+                   }
+                   if (k == "desc") {
+                       if (v.toString() == "full" || v.toString() == "challenge") {
+                           var testel = document.getElementById("gstype_" + match.id);
+                           if(testel.innerHTML!="timeout"){
+                               checkTimeout(match.id - 1);
+                               console.log("checking timeout", match.home, v.toString(), document.getElementById("gstype_" + match.id).innerHTML);
+                           }
+                           blinkUpdate2(document.getElementById("gstype_" + match.id), "timeout");
+                           console.log("updating state to timeout ", match.home);
+                       }
+                       if (v.toString() != "in" && v.toString() != "out" && v.toString() != "full" && v.toString() != "challenge" && v.toString() != "start") {
+                           blinkUpdate22(document.getElementById("gstype_" + match.id), " - ");
+                       }
+
+
+
+
+                   }
+                   if (k == "desc") {
+                       if (v.toString() == "start") {
+                           var testel2 = document.getElementById("gstype_" + match.id);
+                           if(testel2.innerHTML!="start"){
+                               checkPeriod(match.id - 1, "not", match.time);
+                               console.log(v.toString(), match.time, "standard period start");
+                           }
+
+
+                           blinkUpdate2(document.getElementById("gstype_" + match.id), "start");
+                       }
+                       if (v.toString() == "in"  || v.toString() == "out") {
+                           if (match.qual == "startperiod") {
+                               checkPeriod(match.id - 1, match.qual, match.time);
+                               console.log(v.toString(), match.time, "substitution before period start ", match.home);
+                               blinkUpdate(document.getElementById("gstype_" + match.id), "start");
+                           }
+
+
+                       }
+                       if(v.toString() == "end"){
+                           checkPeriod(match.id - 1, "end" , match.time);
+                           console.log("period end for game ", match.home);
+                       }
+                   }
+
+
+                   if(k == "state"){
+                       if(previousValue=="not inplay"){
+                           checkPeriod(match.id - 1, "startperiod", match.time);
+                           console.log("q1 start");
+                       }
+                   }
+
+
+                   blinkUpdate(element, v.toString());
+               }
+           }
+       }
+       if(v.toString()=="game" && k=="state"){
+           refresh();
+       }
+   })
+}
+function getRandomArbitrary(min, max) {
+   return Math.round(Math.random() * (max - min) + min);
+}
+function refresh(){
+   window.location.reload();
 }
 
-function blinkUpdate(element, newValue, newColor='#00ff00') {
-    previousColor = element.style.color;
-    element.innerHTML = newValue;
-    element.style.color = newColor;
 
-    // Set back to original color after timeout ms
-    setTimeout(() => {
-        element.style.color = previousColor
-    }, 2000)
+
+
+function blinkUpdate(element, newValue) {
+   previousColor = element.style.color;
+   element.innerHTML = newValue;
+
+
+}
+
+
+function blinkUpdate2(element, newValue, newColor='#ff0000') {
+   previousColor = element.style.color;
+   element.innerHTML = newValue;
+   element.style.color = newColor;
+
+
+   // Set back to original color after timeout ms
+
+
+}
+function blinkUpdate22(element, newValue22, newColor22='#fff') {
+   previousColor22 = element.style.color;
+   element.innerHTML = newValue22;
+   element.style.color = newColor22;
+
+
+   // Set back to original color after timeout ms
+
+
+}
+
+
+function blinkUpdateYellow(element5, newValue2, newColor2='#f2f605') {
+   previousColor2 = element5.style.color;
+   element5.innerHTML = newValue2;
+   element5.style.color = newColor2;
+
+
+   // Set back to original color after timeout ms
+   setTimeout(() => {
+       element5.style.color = previousColor2
+   }, 2000)
+}
+
+
+function scoreUpdate(element, newValue3, newColor3='#00ff00') {
+   previousColor3 = "#fff";
+   element.innerHTML = newValue3;
+   element.style.color = newColor3;
+   // Set back to original color after timeout ms
+   setTimeout(() => {
+       element.style.color = previousColor3
+   }, 5000)
 }
 </script>
+
