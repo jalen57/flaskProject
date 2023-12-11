@@ -703,6 +703,126 @@ function showGames()
 
 
    };
+   function speakQStart(q_g,t_g){
+       console.log(Date.now());
+       switch (t_g) {
+ case 'ATL':
+   team = "hawks";
+   break;
+ case 'BOS':
+   team = "celtics";
+   break;
+ case 'BKN':
+    team = "nets";
+   break;
+ case 'CHI':
+   team = "bulls";
+   break;
+ case 'CHA':
+   team = "hornets";
+   break;
+ case 'CLE':
+   team = "cavs";
+   break;
+ case 'DET':
+   team = "pistons";
+   break;
+ case 'IND':
+   team = "pacers";
+   break;
+ case 'MIA':
+    team = "heat";
+   break;
+ case 'MIL':
+   team = "bucks";
+   break;
+ case 'NYK':
+   team = "nicks";
+   break;
+ case 'ORL':
+   team = "magic";
+   break;
+ case 'PHI':
+   team = "sixers";
+   break;
+ case 'TOR':
+   team = "raptors";
+   break;
+ case 'WAS':
+    team = "wizards";
+   break;
+ case 'DAL':
+   team = "mavs";
+   break;
+ case 'DEN':
+   team = "nuggets";
+   break;
+ case 'GSW':
+   team = "warriors";
+   break;
+ case 'HOU':
+   team = "rockets";
+   break;
+ case 'LAC':
+   team = "clippers";
+   break;
+ case 'LAL':
+    team = "lakers";
+   break;
+ case 'MEM':
+   team = "grizzlies";
+   break;
+ case 'NOP':
+   team = "pelicans";
+   break;
+ case 'OKC':
+   team = "thunder";
+   break;
+ case 'PHO':
+   team = "suns";
+   break;
+ case 'POR':
+   team = "blazers";
+   break;
+ case 'SAC':
+    team = "kings";
+   break;
+ case 'SAS':
+   team = "spurs";
+   break;
+ case 'UTA':
+   team = "jazz";
+   break;
+     case 'MIN':
+   team = "tee wolves";
+   break;
+
+
+
+
+}
+
+       if(q_g!=1 && q_g!="1"){
+        if(q_g==3 || q_g=="3"){
+            let text = team + " back from half time";
+            let utterance = new SpeechSynthesisUtterance(text);
+            speechSynthesis.speak(utterance);
+            speechSynthesis.speak(utterance);
+            speechSynthesis.speak(utterance);
+        }else{
+            let text = team + "start of quarter " + q_g;
+            let utterance = new SpeechSynthesisUtterance(text);
+            speechSynthesis.speak(utterance);
+            speechSynthesis.speak(utterance);
+            speechSynthesis.speak(utterance);
+        }
+       }
+
+
+       console.log(text)
+
+
+   };
  setInterval(function() {
      fetch('/data_json').then(
        response => response.json()
@@ -769,7 +889,7 @@ function updateElement(match) {
            } else {
                if (previousValue !== v.toString()) {
                    if(k=="time"){
-                       //speakPeriod(match.time);
+                       speakQStart(match.time, match.home);
                    }
 
 
@@ -800,25 +920,7 @@ function updateElement(match) {
 
                    }
                    if (k == "desc") {
-                       if (v.toString() == "start") {
-                           var testel2 = document.getElementById("gstype_" + match.id);
-                           if(testel2.innerHTML!="start"){
-                               checkPeriod(match.id - 1, "not", match.time);
-                               console.log(v.toString(), match.time, "standard period start");
-                           }
 
-
-                           blinkUpdate2(document.getElementById("gstype_" + match.id), "start");
-                       }
-                       if (v.toString() == "in"  || v.toString() == "out") {
-                           if (match.qual == "startperiod") {
-                               checkPeriod(match.id - 1, match.qual, match.time);
-                               console.log(v.toString(), match.time, "substitution before period start ", match.home);
-                               blinkUpdate(document.getElementById("gstype_" + match.id), "start");
-                           }
-
-
-                       }
                        if(v.toString() == "end"){
                            checkPeriod(match.id - 1, "end" , match.time);
                            console.log("period end for game ", match.home);
