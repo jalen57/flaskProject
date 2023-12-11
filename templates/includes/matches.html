@@ -92,42 +92,13 @@ function showGames()
 
 
    function checkPeriod(i,q, pq){
-
-
        var to_team = document.querySelectorAll('[id^="home_"]');
-       var startend = document.querySelectorAll('[id^="desc_"]');
        var qualmsg = q;
        var pq2 = pq;
-       msg = startend[i].textContent;
+
        console.log("in check period now with message ", msg ," and quarter ", pq ,pq2);
-           if(msg == "start"){
-               if(pq2==3 | pq2=="3"){
-                   speakReturn(to_team[i].textContent);
-                   console.log("speaking return based on q==3 with msg start");
 
 
-               }else{
-                   speakPeriod(to_team[i].textContent, startend[i].textContent, pq2);
-                   console.log("speaking any other Q based on msg start");
-               }
-
-
-           }
-           if(qualmsg=="startperiod"){
-               if(pq2==3 | pq2=="3"){
-                   speakReturn(to_team[i].textContent);
-                   console.log("startperiod after half");
-               }else{
-                   if(pq2!=1 && pq2!="1"){
-                       speakPeriod(to_team[i].textContent, "start", pq2);
-                       console.log("startperiod any other Q");
-                   }
-
-
-               }
-
-
-           }
            if(qualmsg == "end"){
                if(pq2==1 || pq2==3 || pq2=="1" || pq2=="3"){
                    speakPeriod(to_team[i].textContent, "end", pq2);
@@ -137,33 +108,17 @@ function showGames()
                    speakHalf(to_team[i].textContent);
                    console.log("half time from check period");
                }
-
-
-
-
            }
+   }
+   function checkTimeout(i2, t2){
+       var to_team = t2;
+       msg = i2
+       if(msg == "full" || msg == "challenge"){
+           speakTimeout(to_team);
+       }
 
 
-
-
-   };
-   function checkTimeout(i2){
-       var timeouts = document.querySelectorAll('[id^="state_"]');
-       var to_team = document.querySelectorAll('[id^="home_"]');
-       var dess = document.querySelectorAll('[id^="desc_"]');
-
-
-           msg = timeouts[i2].textContent;
-           des = dess[i2].textContent;
-           if(msg == "timeout"){
-               speakTimeout(to_team[i2].textContent);
-           }
-           if(des == "full" || des == "challenge"){
-               speakTimeout(to_team[i2].textContent);
-           }
-
-
-   };
+   }
    function speakPeriod(t,se,pe){
        console.log(Date.now());
        switch (t) {
@@ -270,7 +225,7 @@ function showGames()
        console.log(text)
 
 
-   };
+   }
    function speakReturn(t_ret){
        console.log(Date.now());
        switch (t_ret) {
@@ -377,7 +332,7 @@ function showGames()
        console.log(text)
 
 
-   };
+   }
 
 
    function speakTimeout(t){
@@ -854,12 +809,10 @@ function updateElement(match) {
                    console.log(k, " ", v.toString(), previousValue, "for game ", match.id, " with qual ", match.qual.toString());
                }
            }
-           // If Previous value is not equal to the new value, change it!
+
            if (k == "desc") {
                if (v.toString() == "personal" || v.toString() == "technical") {
                    var temp = match.qual.toString();
-                   temp = temp.replace("inpenalty"," ");
-                   temp = temp.replace(","," ");
                    temp = temp.replace("freethrow"," ");
                    blinkUpdateYellow(document.getElementById("free_" + match.id), temp);
 
@@ -904,12 +857,14 @@ function updateElement(match) {
                    if (k == "desc") {
                        if (v.toString() == "full" || v.toString() == "challenge") {
                            var testel = document.getElementById("gstype_" + match.id);
+
                            if(testel.innerHTML!="timeout"){
-                               checkTimeout(match.id - 1);
+                               checkTimeout(match.desc, match.home);
                                console.log("checking timeout", match.home, v.toString(), document.getElementById("gstype_" + match.id).innerHTML);
+                               blinkUpdate2(document.getElementById("gstype_" + match.id), "timeout");
+                               console.log("updating state to timeout ", match.home);
                            }
-                           blinkUpdate2(document.getElementById("gstype_" + match.id), "timeout");
-                           console.log("updating state to timeout ", match.home);
+
                        }
                        if (v.toString() != "in" && v.toString() != "out" && v.toString() != "full" && v.toString() != "challenge" && v.toString() != "start") {
                            blinkUpdate22(document.getElementById("gstype_" + match.id), " - ");

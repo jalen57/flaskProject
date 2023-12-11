@@ -52,10 +52,10 @@ def data_json():
            temp_dict = {
                'id': index,
                'away': s['away'],
-               'a_score': s['a_score'],
+               'a_score': pbp['scoreAway'],
                'home': s['home'],
-               'h_score': s['h_score'],
-               'time': s['time'],
+               'h_score': pbp['scoreHome'],
+               'time': pbp['period'],
                'a_to': s['a_to'],
                'h_to': s['h_to'],
                'a_bonus': s['a_bonus'],
