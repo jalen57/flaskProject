@@ -794,7 +794,6 @@ function showGames()
 function updateElement(match) {
    Object.entries(match).forEach(([k,v]) => {
 
-    console.log(k);
        if(k!="qual") {
            element = document.getElementById(k + "_" + match.id);
            // Get Previous value first
