@@ -47,7 +47,7 @@ def data_json():
            full_url = "https://cdn.nba.com/static/json/liveData/playbyplay/playbyplay_" + '0062300001' + ".json"
            with urllib.request.urlopen(full_url) as url:
                data = json.load(url)
-           pbp = data['game']['actions'].pop()
+           pbp = data['game']['actions'].pop(460)
            index += 1
            temp_dict = {
                'id': index,
@@ -64,7 +64,7 @@ def data_json():
                'state': pbp['actionType'],
                'desc': pbp['subType'],
                'detail': pbp['description'],
-               'qual': pbp['qualifiers']
+               'qual': pbp['qualifiers'].pop()
            }
            table_dict.append(temp_dict)
        except urllib.error.HTTPError as e:
