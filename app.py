@@ -41,7 +41,7 @@ def data_json():
             full_url = "https://cdn.nba.com/static/json/liveData/playbyplay/playbyplay_" + s['game_id'] + ".json"
             with urllib.request.urlopen(full_url) as url:
                 data = json.load(url)
-            pbp = data['game']['actions'].pop()
+            pbp = data['game']['actions'].pop(-1)
             index += 1
             temp_dict = {
                 'id': index,
