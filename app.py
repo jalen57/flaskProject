@@ -44,10 +44,10 @@ def data_json():
    index = 0
    for s in sched:
        try:
-           full_url = "https://cdn.nba.com/static/json/liveData/playbyplay/playbyplay_" + '0062300001' + ".json"
+           full_url = "https://cdn.nba.com/static/json/liveData/playbyplay/playbyplay_" + s['game_id'] + ".json"
            with urllib.request.urlopen(full_url) as url:
                data = json.load(url)
-           pbp = data['game']['actions'].pop(460)
+           pbp = data['game']['actions'].pop()
            index += 1
            temp_dict = {
                'id': index,
