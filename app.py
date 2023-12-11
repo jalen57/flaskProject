@@ -44,7 +44,7 @@ def data_json():
    index = 0
    for s in sched:
        try:
-           full_url = "https://cdn.nba.com/static/json/liveData/playbyplay/playbyplay_" + s['game_id'] + ".json"
+           full_url = "https://cdn.nba.com/static/json/liveData/playbyplay/playbyplay_" + s['0062300001'] + ".json"
            with urllib.request.urlopen(full_url) as url:
                data = json.load(url)
            pbp = data['game']['actions'].pop()
