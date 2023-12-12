@@ -217,7 +217,7 @@ function showGames()
 
 
 }
-       let text = team + se + " of quarter " + pe ;
+       let text = team + " " + se + " of quarter " + pe ;
        let utterance = new SpeechSynthesisUtterance(text);
        speechSynthesis.speak(utterance);
        speechSynthesis.speak(utterance);
@@ -843,6 +843,7 @@ function updateElement(match) {
            } else {
                if (previousValue !== v.toString()) {
                    if(k=="time"){
+                       blinkUpdate(element, v.toString());
                        speakQStart(match.time, match.home);
                    }
 
