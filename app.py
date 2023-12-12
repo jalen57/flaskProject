@@ -64,7 +64,7 @@ def data_json():
                'state': pbp['actionType'],
                'desc': pbp['subType'],
                'detail': pbp['description'],
-               'qual': pbp['qualifiers'].pop()
+               'qual': pbp['qualifiers']
            }
            table_dict.append(temp_dict)
        except urllib.error.HTTPError as e:
