@@ -32,8 +32,7 @@ def schedule():
                'h_bonus': game['homeTeam']['inBonus'],
                'clock': game['gameStatusText']
            }
-           if temp_dict['clock'].strip() != "Final":
-               games_dict.append(temp_dict)
+           games_dict.append(temp_dict)
        return(games_dict)
 
 
@@ -75,7 +74,7 @@ def data_json():
                'a_score': s['a_score'],
                'home': s['home'],
                'h_score': s['h_score'],
-               'time': s['time'],
+               'time': 1,
                'a_to': s['a_to'],
                'h_to': s['h_to'],
                'a_bonus': 'none',

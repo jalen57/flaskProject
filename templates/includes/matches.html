@@ -24,22 +24,22 @@
  <tbody id="table_body">
    {% for match in matches %}
      <tr>
-       <td id="id_{{ match.id }}" class="{{ match.state }}">{{ match.id }}</td>
-       <td id="away_{{ match.id }}" class="{{ match.state }}">{{ match.away }}</td>
-       <td id="a_score_{{ match.id }}" class="{{ match.state }}">{{ match.a_score }}</td>
-       <td id="h_score_{{ match.id }}" class="{{ match.state }}">{{ match.h_score }}</td>
-       <td id="home_{{ match.id }}" class="{{ match.state }}">{{ match.home }}</td>
-         <td id="clock_{{ match.id }}" class="{{ match.state }}">{{ match.clock }}</td>
-       <td id="time_{{ match.id }}" class="noness {{ match.state }}">{{ match.time }}</td>
-     <td id="a_to_{{ match.id }}" class="noness {{ match.state }}">{{ match.a_to }}</td>
-     <td id="h_to_{{ match.id }}" class="noness {{ match.state }}">{{ match.h_to }}</td>
-     <td id="a_bonus_{{ match.id }}" class="{{ match.state }}">{{ match.a_bonus }}</td>
-     <td id="h_bonus_{{ match.id }}" class="{{ match.state }}">{{ match.h_bonus }}</td>
-     <td id="state_{{ match.id }}" class="noness {{ match.state }}">{{ match.state }}</td>
-     <td id="desc_{{ match.id }}" class="noness {{ match.state }}">{{ match.desc }}</td>
-     <td id="detail_{{ match.id }}" class="noness {{ match.state }}">{{ match.detail }}</td>
-     <td id="gstype_{{ match.id }}" class="{{ match.state }}">{{ 0 }}</td>
-     <td id="free_{{ match.id }}" class="{{ match.state }}">{{ 0 }}</td>
+       <td id="id_{{ match.home }}" class="{{ match.state }}">{{ match.id }}</td>
+       <td id="away_{{ match.home }}" class="{{ match.state }}">{{ match.away }}</td>
+       <td id="a_score_{{ match.home }}" class="{{ match.state }}">{{ match.a_score }}</td>
+       <td id="h_score_{{ match.home }}" class="{{ match.state }}">{{ match.h_score }}</td>
+       <td id="home_{{ match.home }}" class="{{ match.state }}">{{ match.home }}</td>
+         <td id="clock_{{ match.home }}" class="{{ match.state }}">{{ match.clock }}</td>
+       <td id="time_{{ match.home }}" class="noness {{ match.state }}">{{ match.time }}</td>
+     <td id="a_to_{{ match.home }}" class="noness {{ match.state }}">{{ match.a_to }}</td>
+     <td id="h_to_{{ match.home }}" class="noness {{ match.state }}">{{ match.h_to }}</td>
+     <td id="a_bonus_{{ match.home }}" class="{{ match.state }}">{{ match.a_bonus }}</td>
+     <td id="h_bonus_{{ match.home }}" class="{{ match.state }}">{{ match.h_bonus }}</td>
+     <td id="state_{{ match.home }}" class="noness {{ match.state }}">{{ match.state }}</td>
+     <td id="desc_{{ match.home }}" class="noness {{ match.state }}">{{ match.desc }}</td>
+     <td id="detail_{{ match.home }}" class="noness {{ match.state }}">{{ match.detail }}</td>
+     <td id="gstype_{{ match.home }}" class="{{ match.state }}">{{ 0 }}</td>
+     <td id="free_{{ match.home }}" class="{{ match.state }}">{{ 0 }}</td>
      </tr>
    {% endfor %}
  </tbody>
@@ -794,10 +794,11 @@ function showGames()
 
 
 function updateElement(match) {
-   Object.entries(match).forEach(([k,v]) => {
+
+    Object.entries(match).forEach(([k,v]) => {
 
        if(k!="qual") {
-           element = document.getElementById(k + "_" + match.id);
+           element = document.getElementById(k + "_" + match.home);
            // Get Previous value first
            previousValue = element.innerHTML;
 
@@ -817,21 +818,21 @@ function updateElement(match) {
                    temp = temp.replace("freethrow"," ");
                    temp = temp.replace(",","");
                    temp = temp.replace("inpenalty"," ");
-                   blinkUpdateYellow(document.getElementById("free_" + match.id), temp);
+                   blinkUpdateYellow(document.getElementById("free_" + match.home), temp);
 
 
                }
                if (v.toString() == "1 of 1" || v.toString() == "2 of 2" || v.toString() == "3 of 3") {
-                   blinkUpdateYellow(document.getElementById("free_" + match.id), "0");
+                   blinkUpdateYellow(document.getElementById("free_" + match.home), "0");
                }
                if (previousValue == "1 of 1" || previousValue == "2 of 2" || previousValue == "3 of 3") {
-                   blinkUpdateYellow(document.getElementById("free_" + match.id), "0");
+                   blinkUpdateYellow(document.getElementById("free_" + match.home), "0");
                }
                if (v.toString() == "1 of 2" || v.toString() == "2 of 3") {
-                   blinkUpdateYellow(document.getElementById("free_" + match.id), "1");
+                   blinkUpdateYellow(document.getElementById("free_" + match.home), "1");
                }
                if (v.toString() == "1 of 3" || v.toString() == "1 of 3") {
-                   blinkUpdateYellow(document.getElementById("free_" + match.id), "2");
+                   blinkUpdateYellow(document.getElementById("free_" + match.home), "2");
                }
 
 
@@ -860,18 +861,18 @@ function updateElement(match) {
                    }
                    if (k == "desc") {
                        if (v.toString() == "full" || v.toString() == "challenge") {
-                           var testel = document.getElementById("gstype_" + match.id);
+                           var testel = document.getElementById("gstype_" + match.home);
 
                            if(testel.innerHTML!="timeout"){
                                checkTimeout(match.desc, match.home);
-                               console.log("checking timeout", match.home, v.toString(), document.getElementById("gstype_" + match.id).innerHTML);
-                               blinkUpdate2(document.getElementById("gstype_" + match.id), "timeout");
+                               console.log("checking timeout", match.home, v.toString(), document.getElementById("gstype_" + match.home).innerHTML);
+                               blinkUpdate2(document.getElementById("gstype_" + match.home), "timeout");
                                console.log("updating state to timeout ", match.home);
                            }
 
                        }
                        if (v.toString() != "in" && v.toString() != "out" && v.toString() != "full" && v.toString() != "challenge" && v.toString() != "start") {
-                           blinkUpdate22(document.getElementById("gstype_" + match.id), " - ");
+                           blinkUpdate22(document.getElementById("gstype_" + match.home), " - ");
                        }
 
 
