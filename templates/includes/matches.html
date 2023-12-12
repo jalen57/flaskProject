@@ -813,6 +813,8 @@ function updateElement(match) {
                if (v.toString() == "personal" || v.toString() == "technical") {
                    var temp = match.qual.toString();
                    temp = temp.replace("freethrow"," ");
+                   temp = temp.replace(",","");
+                   temp = temp.replace("inpenalty"," ");
                    blinkUpdateYellow(document.getElementById("free_" + match.id), temp);
 
 
