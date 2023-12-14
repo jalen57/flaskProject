@@ -2,7 +2,7 @@ from flask import Flask
 from flask import render_template, jsonify
 import urllib.request, json
 import urllib.error
-
+import pandas as pd
 
 app = Flask(__name__)
 
@@ -46,7 +46,21 @@ def data_json():
            full_url = "https://cdn.nba.com/static/json/liveData/playbyplay/playbyplay_" + s['game_id'] + ".json"
            with urllib.request.urlopen(full_url) as url:
                data = json.load(url)
+           new = pd.DataFrame.from_dict(data['game']['actions'])
            pbp = data['game']['actions'].pop()
+           temp_q = pbp['period']
+           away = s['away']
+           home = s['home']
+           a_fouls = (new.period[(new.period==temp_q) & (new.actionType=="foul") & (new.teamTricode==away)].count())
+           h_fouls = (new.period[(new.period==temp_q) & (new.actionType=="foul") & (new.teamTricode==home)].count())
+           if a_fouls >= 4:
+               a_b = "BONUS"
+           else:
+               a_b = "No"
+           if h_fouls >= 4:
+               h_b = "BONUS"
+           else:
+               h_b = "No"
            index += 1
            temp_dict = {
                'id': index,
@@ -57,8 +71,8 @@ def data_json():
                'time': pbp['period'],
                'a_to': s['a_to'],
                'h_to': s['h_to'],
-               'a_bonus': '0',
-               'h_bonus': '0',
+               'a_bonus': a_b,
+               'h_bonus': h_b,
                'clock': pbp['clock'].replace("PT","").replace("M",":").replace("S",""),
                'state': pbp['actionType'],
                'desc': pbp['subType'],
