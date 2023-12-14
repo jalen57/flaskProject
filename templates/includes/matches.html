@@ -15,8 +15,10 @@
         <th scope="col" class="noness">Last Play</th>
         <th scope="col" class="noness">Play Type</th>
         <th scope="col" class="noness" style="width:300px">Play Info</th>
-       <th scope="col">Game State</th>
+       <th scope="col">Timeout</th>
        <th scope="col">Free Throws</th>
+       <th scope="col" class="noness">PStart</th>
+       <th scope="col" class="noness">PEnd</th>
 
 
    </tr>
@@ -38,8 +40,11 @@
      <td id="state_{{ match.home }}" class="noness {{ match.state }}">{{ match.state }}</td>
      <td id="desc_{{ match.home }}" class="noness {{ match.state }}">{{ match.desc }}</td>
      <td id="detail_{{ match.home }}" class="noness {{ match.state }}">{{ match.detail }}</td>
-     <td id="gstype_{{ match.home }}" class="{{ match.state }}">{{ 0 }}</td>
+     <td id="gstype_{{ match.home }}" class="{{ match.state }}">{{ "-" }}</td>
      <td id="free_{{ match.home }}" class="{{ match.state }}">{{ 0 }}</td>
+     <td id="pstart_{{ match.home }}" class="{{ match.state }}">{{ 0 }}</td>
+     <td id="pend_{{ match.home }}" class="{{ match.state }}">{{ 0 }}</td>
+
      </tr>
    {% endfor %}
  </tbody>
@@ -55,72 +60,46 @@
 
    function hideExcess()
 {
-   var elems = document.getElementsByClassName("noness");
-   for(var i = 0; i<elems.length; i++) {
+   let elems = document.getElementsByClassName("noness");
+   for(let i = 0; i<elems.length; i++) {
        elems[i].style.display = "none";
    }
 }
  function hideGames()
 {
-   var elems = document.getElementsByClassName("inplay");
-   for(var i = 0; i<elems.length; i++) {
+   let elems = document.getElementsByClassName("inplay");
+   for(let i = 0; i<elems.length; i++) {
        elems[i].style.display = "none";
    }
-   var elems2 = document.getElementsByClassName("game");
-   for(var i = 0; i<elems2.length; i++) {
+   let elems2 = document.getElementsByClassName("game");
+   for(let i = 0; i<elems2.length; i++) {
        elems2[i].style.display = "none";
    }
 }
 function showGames()
 {
-   var elems = document.getElementsByClassName("inplay");
-   for(var i = 0; i<elems.length; i++) {
+   let elems = document.getElementsByClassName("inplay");
+   for(let i = 0; i<elems.length; i++) {
        elems[i].style.display = "";
    }
-   var elems2 = document.getElementsByClassName("game");
-   for(var i = 0; i<elems2.length; i++) {
+   let elems2 = document.getElementsByClassName("game");
+   for(let i = 0; i<elems2.length; i++) {
        elems2[i].style.display = "";
    }
 }
   function showExcess()
 {
-   var elems = document.getElementsByClassName("noness");
-   for(var i = 0; i<elems.length; i++) {
+   let elems = document.getElementsByClassName("noness");
+   for(let i = 0; i<elems.length; i++) {
        elems[i].style.display = "";
    }
 }
 
 
-   function checkPeriod(i,q, pq){
-       var to_team = document.querySelectorAll('[id^="home_"]');
-       var qualmsg = q;
-       var pq2 = pq;
 
-       console.log("in check period now with quarter ", pq ,pq2);
-
-
-           if(qualmsg == "end"){
-               if(pq2==1 || pq2==3 || pq2=="1" || pq2=="3"){
-                   speakPeriod(to_team[i].textContent, "end", pq2);
-                   console.log("endperiod 1 or 3");
-               }
-               if(pq2==2 || pq2=="2" ){
-                   speakHalf(to_team[i].textContent);
-                   console.log("half time from check period");
-               }
-           }
-   }
-   function checkTimeout(i2, t2){
-       var to_team = t2;
-       msg = i2
-       if(msg == "full" || msg == "challenge"){
-           speakTimeout(to_team);
-       }
-
-
-   }
    function speakPeriod(t,se,pe){
        console.log(Date.now());
+       let team;
        switch (t) {
  case 'ATL':
    team = "hawks";
@@ -226,8 +205,117 @@ function showGames()
 
 
    }
+   function speakOTPeriod(t,se, pe){
+       console.log(Date.now());
+       let team;
+       switch (t) {
+ case 'ATL':
+   team = "hawks";
+   break;
+ case 'BOS':
+   team = "celtics";
+   break;
+ case 'BKN':
+    team = "nets";
+   break;
+ case 'CHI':
+   team = "bulls";
+   break;
+ case 'CHA':
+   team = "hornets";
+   break;
+ case 'CLE':
+   team = "cavs";
+   break;
+ case 'DET':
+   team = "pistons";
+   break;
+ case 'IND':
+   team = "pacers";
+   break;
+ case 'MIA':
+    team = "heat";
+   break;
+ case 'MIL':
+   team = "bucks";
+   break;
+ case 'NYK':
+   team = "nicks";
+   break;
+ case 'ORL':
+   team = "magic";
+   break;
+ case 'PHI':
+   team = "sixers";
+   break;
+ case 'TOR':
+   team = "raptors";
+   break;
+ case 'WAS':
+    team = "wizards";
+   break;
+ case 'DAL':
+   team = "mavs";
+   break;
+ case 'DEN':
+   team = "nuggets";
+   break;
+ case 'GSW':
+   team = "warriors";
+   break;
+ case 'HOU':
+   team = "rockets";
+   break;
+ case 'LAC':
+   team = "clippers";
+   break;
+ case 'LAL':
+    team = "lakers";
+   break;
+ case 'MEM':
+   team = "grizzlies";
+   break;
+ case 'NOP':
+   team = "pelicans";
+   break;
+ case 'OKC':
+   team = "thunder";
+   break;
+ case 'PHX':
+   team = "suns";
+   break;
+ case 'POR':
+   team = "blazers";
+   break;
+ case 'SAC':
+    team = "kings";
+   break;
+ case 'SAS':
+   team = "spurs";
+   break;
+ case 'UTA':
+   team = "jazz";
+   break;
+     case 'MIN':
+   team = "tee wolves";
+   break;
+
+
+
+
+}
+       let text = team + " over time " + pe + " " + se;
+       let utterance = new SpeechSynthesisUtterance(text);
+       speechSynthesis.speak(utterance);
+       speechSynthesis.speak(utterance);
+       speechSynthesis.speak(utterance);
+       console.log(text);
+
+
+   }
    function speakReturn(t_ret){
        console.log(Date.now());
+       let team;
        switch (t_ret) {
  case 'ATL':
    team = "hawks";
@@ -333,10 +421,9 @@ function showGames()
 
 
    }
-
-
    function speakTimeout(t){
        console.log(Date.now());
+       let team;
        switch (t) {
  case 'ATL':
    team = "hawks";
@@ -442,10 +529,9 @@ function showGames()
 
 
    };
-
-
    function speakHalf(t){
        console.log(Date.now());
+       let team;
        switch (t) {
  case 'ATL':
    team = "hawks";
@@ -551,8 +637,117 @@ function showGames()
 
 
    };
+   function speakOvertime(t){
+       console.log(Date.now());
+       let team;
+       switch (t) {
+ case 'ATL':
+   team = "hawks";
+   break;
+ case 'BOS':
+   team = "celtics";
+   break;
+ case 'BKN':
+    team = "nets";
+   break;
+ case 'CHI':
+   team = "bulls";
+   break;
+ case 'CHA':
+   team = "hornets";
+   break;
+ case 'CLE':
+   team = "cavs";
+   break;
+ case 'DET':
+   team = "pistons";
+   break;
+ case 'IND':
+   team = "pacers";
+   break;
+ case 'MIA':
+    team = "heat";
+   break;
+ case 'MIL':
+   team = "bucks";
+   break;
+ case 'NYK':
+   team = "nicks";
+   break;
+ case 'ORL':
+   team = "magic";
+   break;
+ case 'PHI':
+   team = "sixers";
+   break;
+ case 'TOR':
+   team = "raptors";
+   break;
+ case 'WAS':
+    team = "wizards";
+   break;
+ case 'DAL':
+   team = "mavs";
+   break;
+ case 'DEN':
+   team = "nuggets";
+   break;
+ case 'GSW':
+   team = "warriors";
+   break;
+ case 'HOU':
+   team = "rockets";
+   break;
+ case 'LAC':
+   team = "clippers";
+   break;
+ case 'LAL':
+    team = "lakers";
+   break;
+ case 'MEM':
+   team = "grizzlies";
+   break;
+ case 'NOP':
+   team = "pelicans";
+   break;
+ case 'OKC':
+   team = "thunder";
+   break;
+ case 'PHO':
+   team = "suns";
+   break;
+ case 'POR':
+   team = "blazers";
+   break;
+ case 'SAC':
+    team = "kings";
+   break;
+ case 'SAS':
+   team = "spurs";
+   break;
+ case 'UTA':
+   team = "jazz";
+   break;
+     case 'MIN':
+   team = "tee wolves";
+   break;
+
+
+
+
+}
+       let text = team + " heading to over time";
+       let utterance = new SpeechSynthesisUtterance(text);
+       speechSynthesis.speak(utterance);
+       speechSynthesis.speak(utterance);
+       speechSynthesis.speak(utterance);
+       console.log(text)
+
+
+   };
    function speakStart(t_g){
        console.log(Date.now());
+       let team;
        switch (t_g) {
  case 'ATL':
    team = "hawks";
@@ -658,8 +853,116 @@ function showGames()
 
 
    };
+   function speakReturn(t_g){
+       console.log(Date.now());
+       let team;
+       switch (t_g) {
+ case 'ATL':
+   team = "hawks";
+   break;
+ case 'BOS':
+   team = "celtics";
+   break;
+ case 'BKN':
+    team = "nets";
+   break;
+ case 'CHI':
+   team = "bulls";
+   break;
+ case 'CHA':
+   team = "hornets";
+   break;
+ case 'CLE':
+   team = "cavs";
+   break;
+ case 'DET':
+   team = "pistons";
+   break;
+ case 'IND':
+   team = "pacers";
+   break;
+ case 'MIA':
+    team = "heat";
+   break;
+ case 'MIL':
+   team = "bucks";
+   break;
+ case 'NYK':
+   team = "nicks";
+   break;
+ case 'ORL':
+   team = "magic";
+   break;
+ case 'PHI':
+   team = "sixers";
+   break;
+ case 'TOR':
+   team = "raptors";
+   break;
+ case 'WAS':
+    team = "wizards";
+   break;
+ case 'DAL':
+   team = "mavs";
+   break;
+ case 'DEN':
+   team = "nuggets";
+   break;
+ case 'GSW':
+   team = "warriors";
+   break;
+ case 'HOU':
+   team = "rockets";
+   break;
+ case 'LAC':
+   team = "clippers";
+   break;
+ case 'LAL':
+    team = "lakers";
+   break;
+ case 'MEM':
+   team = "grizzlies";
+   break;
+ case 'NOP':
+   team = "pelicans";
+   break;
+ case 'OKC':
+   team = "thunder";
+   break;
+ case 'PHO':
+   team = "suns";
+   break;
+ case 'POR':
+   team = "blazers";
+   break;
+ case 'SAC':
+    team = "kings";
+   break;
+ case 'SAS':
+   team = "spurs";
+   break;
+ case 'UTA':
+   team = "jazz";
+   break;
+     case 'MIN':
+   team = "tee wolves";
+   break;
+
+
+
+
+}
+
+       let text = team + " back from half time";
+       let utterance = new SpeechSynthesisUtterance(text);
+       speechSynthesis.speak(utterance);
+       speechSynthesis.speak(utterance);
+       speechSynthesis.speak(utterance);
+       console.log(text);
+   };
    function speakQStart(q_g,t_g){
        console.log(Date.now());
+       let team;
        switch (t_g) {
  case 'ATL':
    team = "hawks";
@@ -801,8 +1104,12 @@ function updateElement(match) {
            element = document.getElementById(k + "_" + match.home);
            // Get Previous value first
            previousValue = element.innerHTML;
-
-
+           timeoutElement = document.getElementById("gstype_" + match.home);
+           startElement = document.getElementById("pstart_" + match.home);
+           endElement = document.getElementById("pend_" + match.home);
+           timeoutValue = timeoutElement.innerHTML;
+           startValue = startElement.innerHTML;
+           endValue = endElement.innerHTML;
            //check game start
            if(previousValue == "not inplay" && k=="desc"){
                if(v.toString()!=previousValue){
@@ -811,8 +1118,9 @@ function updateElement(match) {
                    console.log(k, " ", v.toString(), previousValue, "for game ", match.id, " with qual ", match.qual.toString());
                }
            }
-
+            //fouls section
            if (k == "desc") {
+               //fouls
                if (v.toString() == "personal" || v.toString() == "technical") {
                    var temp = match.qual.toString();
                    temp = temp.replace("freethrow"," ");
@@ -834,72 +1142,113 @@ function updateElement(match) {
                if (v.toString() == "1 of 3" || v.toString() == "1 of 3") {
                    blinkUpdateYellow(document.getElementById("free_" + match.home), "2");
                }
+               //period end
 
+               //timeouts
+                if (v.toString() == "full" || v.toString() == "challenge") {
+                    if(timeoutValue=="-"){
+                        speakTimeout(match.home);
+                        console.log("timeout", match.home, v.toString(), document.getElementById("gstype_" + match.home).innerHTML);
+                        blinkUpdate2(document.getElementById("gstype_" + match.home), "timeout");
+                        console.log("updating state to ", document.getElementById("gstype_" + match.home).innerHTML);
+                    }
 
+                }
+               if (v.toString() != "in" && v.toString() != "out" && v.toString() != "full" && v.toString() != "challenge" && v.toString() != "start") {
+                   blinkUpdate22(document.getElementById("gstype_" + match.home), "-");
+               }
            }
 
+           //periods check
+           if(k == "clock") {
+               //halftime
+               if(v.toString()=="00:00.00" && endValue!=2 && match.time==2){
+                   blinkUpdate(document.getElementById("pend_" + match.home), 2)
+                   console.log("calling halftime from update ", match.time);
+                   speakHalf(match.home);
+               }
+               //end q1
+               if(v.toString()=="00:00.00" && endValue!=1 && match.time==1){
+                   blinkUpdate(document.getElementById("pend_" + match.home), 1)
+                   console.log("period end for ", match.home, " period ", match.time);
+                   speakPeriod(match.home, "end" , 1);
 
+               }
+               //end q3
+               if(v.toString()=="00:00.00" && endValue!=3 && match.time==3){
+                   blinkUpdate(document.getElementById("pend_" + match.home), 3)
+                   console.log("period end for ", match.home, " period ", match.time);
+                   speakPeriod(match.home, "end" , 3);
+
+               }
+               //end q4 (with overtime)
+               if(v.toString()=="00:00.00" && endValue!=4 && match.time==4){
+                   if(match.a_score == match.h_score){
+                       blinkUpdate(document.getElementById("pend_" + match.home), 4)
+                       console.log("period end for ", match.home, " period ", match.time);
+                       speakOvertime(match.home);
+                   }
+               }
+
+               //start q2
+               if(v.toString()=="12:00.00" && startValue!=2 && match.time==2){
+                   blinkUpdate(document.getElementById("pstart_" + match.home), 2)
+                   console.log("period start for ", match.home, " period ", match.time);
+                   speakPeriod(match.home, "start" , 2);
+               }
+
+               //start q3
+               if(v.toString()=="12:00.00" && startValue!=3 && match.time==3){
+                   blinkUpdate(document.getElementById("pstart_" + match.home), 3)
+                   console.log("period start for ", match.home, " period ", match.time);
+                   speakReturn(match.home,);
+               }
+               //start q4
+                if(v.toString()=="12:00.00" && startValue!=4 && match.time==4){
+                   blinkUpdate(document.getElementById("pstart_" + match.home), 4)
+                   console.log("period start for ", match.home, " period ", match.time);
+                   speakPeriod(match.home, "start" , 4);
+               }
+                //start OT
+               let otp = match.time;
+                if(v.toString()=="12:00.00" && startValue!=otp && otp>4){
+                   blinkUpdate(document.getElementById("pstart_" + match.home), otp)
+                   console.log("OT start for ", match.home, " period ", match.time);
+                   speakOTPeriod(match.home, "start" , otp-4);
+               }
+
+               if (previousValue !== v.toString()) {
+                   blinkUpdate(element, v.toString());
+               }
+
+               //
+               if(previousValue != v.toString()){
+                   if(v.toString() == "end"){
+
+
+                       blinkUpdate(endElement, "end");
+                   }
+               }
+               //
+           }
+
+           //score update
            if (k == "a_score" || k == "h_score") {
                if (previousValue !== v.toString()) {
                    scoreUpdate(element, v.toString());
                }
+               //get rid of this else
            } else {
                if (previousValue !== v.toString()) {
-                   if(k=="time"){
-                       blinkUpdate(element, v.toString());
-                       speakQStart(match.time, match.home);
-                   }
 
 
-
-
-                   if(k == "clock") {
-                       if(v.toString()=="Half"){
-                           console.log("calling halftime from update ", match.time);
-                           speakHalf(match.home);
-                       }
-                   }
-                   if (k == "desc") {
-                       if (v.toString() == "full" || v.toString() == "challenge") {
-                           var testel = document.getElementById("gstype_" + match.home);
-
-                           if(testel.innerHTML!="timeout"){
-                               checkTimeout(match.desc, match.home);
-                               console.log("checking timeout", match.home, v.toString(), document.getElementById("gstype_" + match.home).innerHTML);
-                               blinkUpdate2(document.getElementById("gstype_" + match.home), "timeout");
-                               console.log("updating state to ", document.getElementById("gstype_" + match.home).innerHTML);
-                           }
-
-                       }
-                       if (v.toString() != "in" && v.toString() != "out" && v.toString() != "full" && v.toString() != "challenge" && v.toString() != "start") {
-                           blinkUpdate22(document.getElementById("gstype_" + match.home), " - ");
-                       }
-
-
-
-
-                   }
-                   if (k == "desc") {
-
-                       if(v.toString() == "end"){
-                           checkPeriod(match.id - 1, "end" , match.time);
-                           console.log("period end for game ", match.home);
-                       }
-                   }
-
-
-                   if(k == "state"){
-                       if(previousValue=="not inplay"){
-                           checkPeriod(match.id - 1, "startperiod", match.time);
-                           console.log("q1 start");
-                       }
-                   }
 
 
                    blinkUpdate(element, v.toString());
                }
            }
        }
+       //game end refresh handler
        if(v.toString()=="game" && k=="state"){
            refresh();
        }

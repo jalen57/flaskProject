@@ -59,7 +59,7 @@ def data_json():
                'h_to': s['h_to'],
                'a_bonus': '0',
                'h_bonus': '0',
-               'clock': s['clock'],
+               'clock': pbp['clock'].replace("PT","").replace("M",":").replace("S",""),
                'state': pbp['actionType'],
                'desc': pbp['subType'],
                'detail': pbp['description'],
