@@ -867,7 +867,7 @@ function updateElement(match) {
                                checkTimeout(match.desc, match.home);
                                console.log("checking timeout", match.home, v.toString(), document.getElementById("gstype_" + match.home).innerHTML);
                                blinkUpdate2(document.getElementById("gstype_" + match.home), "timeout");
-                               console.log("updating state to timeout ", match.home);
+                               console.log("updating state to ", document.getElementById("gstype_" + match.home).innerHTML);
                            }
 
                        }
