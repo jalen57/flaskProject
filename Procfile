@@ -1,1 +1,1 @@
-web gunicorn --threads 4:$PORT app:app
+web gunicorn app:app
