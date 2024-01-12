@@ -13,7 +13,7 @@ application = Flask(__name__)
 
 @application.route('/data_json')
 def data_json():
-    db = pymysql.connect(host='database-6.crga42aec7fl.us-east-1.rds.amazonaws.com', user="admin",password="Jsoccer5",port=3306, database="database6")
+    db = pymysql.connect(host='database-6.crga42aec7fl.us-east-1.rds.amazonaws.com', user="admin",password="",port=3306, database="database6")
     query = "SELECT * FROM data_bulk"
     try: 
         df = pd.read_sql(query, db)
